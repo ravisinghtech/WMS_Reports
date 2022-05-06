@@ -1,0 +1,71 @@
+{% extends 'home.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory Reports</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dropdown.css' %}">
+</head>
+<form action="InventoryReports" method="post">
+    {% csrf_token %}
+<h1>{{Status}}</h1>
+    <div class="leftdropdown">
+      <table>
+    <tr height="40px">
+    <td style="text-align: center; vertical-align: top">
+        <div class="box">
+        <select id="selectBatch" name="selectBatch" class="dropdown-control">
+            <option selected disabled="true">Batch Number</option>
+            {% for results in batchdata %}
+            <option value="{{ results.0 }}">{{ results.0 }}</option>
+            {% endfor %}
+        </select>
+            </div>
+  </tr>
+    <tr height="30px">
+         <td style="text-align: center; vertical-align: top">
+              <div class="box">
+             <select name="selectMaterial" id="selectMaterial" class="dropdown-control">
+                 <option selected disabled="true">Material Code</option>
+            {% for results in materialdata %}
+            <option value="{{ results.0 }}">{{ results.1 }}</option>
+            {% endfor %}
+    </select>
+          </div>
+         </td>
+    </tr>
+    <tr height="30px">
+        <td style="text-align: center; vertical-align: top">
+             <div class="box">
+            <select id="selectManufacturing" name="selectManufacturing" class="dropdown-control">
+                <option selected disabled="true">Manufacturing Line</option>
+         {% for results in manufacturingdata %}
+            <option value="{{ results.0 }}">{{ results.1 }}</option>
+            {% endfor %}
+    </select>
+          </div>
+        </td>
+    </tr>
+    <tr height="30px">
+        <td style="text-align: center; vertical-align: top">
+             <div class="box">
+            <select id="selectPellet" name="selectPellet" class="dropdown-control">
+                <option selected disabled="true">Pallet Status</option>
+        {% for results in palletdata %}
+            <option value="{{ results.0 }}">{{ results.1 }}</option>
+            {% endfor %}
+    </select>
+         </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center">
+            <input type="submit" class="btn" value ='Get Report'
+                   onclick="location.href='{% url 'InventoryReports' %}'"></td>
+    </tr>
+</table>
+    </div>
+</form>
+</html>
+{% endblock %}

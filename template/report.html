@@ -1,0 +1,115 @@
+{% extends 'inventoryreport.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'report.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+</head>
+<body>
+<form action="downloadReport" method="post">
+    {% csrf_token %}
+    <div class="row">
+                     <div class="col-sm float-left">
+                         <img src="/static/images/Girnarlogo2.png" width="150" height="80" class="img-fluid" alt="Responsive image">
+                     </div>
+                     <div class="col-sm">
+                          <div class="box">
+                        <select id="selectDownloadFormat" name="selectDownloadFormat" class="dropdown-control">
+                            <option selected disabled="true">Format</option>
+                            <option value="PDF">PDF</option>
+                            <option value="CSV">CSV</option>
+                            <option value="EXCEL">EXCEL</option>
+                       </select>
+                           <input type="submit" class="btn" value ='Download'
+                              onclick="location.href='{% url 'downloadReport' %}'">
+                          </div>
+                     </div>
+                     <div class="col-sm">
+                         <h6 style="text-align:left"> BANAS UHT WMS-ASRS Inventory Report</h6>
+                           <h1>{{errors}}</h1>
+                     </div>
+                     <div class="col-sm float-right">
+                         <img src="/static/images/BanasLogo.PNG" width="60" height="60" class="img-fluid" alt="Responsive image">
+                    </div>
+                 </div>
+  <ul class="nav nav-pills" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+            role="tab" aria-controls="home" aria-selected="true">Sub Reports</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
+            role="tab" aria-controls="profile" aria-selected="false">All Reports</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <div style="height: 55vh; width:auto; overflow-y: auto;">
+        <table class="table table-sm table-hover table-dark">
+                <thead class="thead-light">
+                <th>Batch No</th>
+                <th>Material Code</th>
+                <th>Load</th>
+                <th>Cartons</th>
+                <th>Pallet Status</th>
+                <th>
+                </th>
+                </thead>
+                <tbody>
+                 {% for results in SummaryRecord %}
+                 <tr>
+                     <td>{{ results.0 }}</td>
+                     <td>{{ results.1 }}</td>
+                     <td>{{ results.2 }}</td>
+                     <td>{{ results.3 }}</td>
+                     <td>{{ results.4 }}</td>
+                 </tr>
+                 {% endfor %}
+                </tbody>
+        </table>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+       <div style="height: 53vh; width:auto; overflow-y: auto;">
+        <table class="table table-sm table-hover table-dark">
+                <thead class="thead-light">
+                <th>Batch No</th>
+                <th>Batch Date</th>
+                <th>Pallet No.</th>
+                <th>Material Code</th>
+                <th>Material Type</th>
+                <th>Material Name</th>
+                <th>Cartons on Pallet</th>
+                <th>Line No.</th>
+                <th>Pallet Status</th>
+                <th>Lab No.</th>
+                <th>Production Time</th>
+                </thead>
+                <tbody>
+                 {% for results in AllRecord %}
+                 <tr>
+                     <td>{{ results.0 }}</td>
+                     <td>{{ results.1|date:'Y-m-d' }}</td>
+                     <td>{{ results.2 }}</td>
+                     <td>{{ results.3 }}</td>
+                     <td>{{ results.4 }}</td>
+                     <td>{{ results.5 }}</td>
+                     <td>{{ results.6 }}</td>
+                     <td>{{ results.7 }}</td>
+                     <td>{{ results.8 }}</td>
+                     <td>{{ results.9 }}</td>
+                     <td>{{ results.10|date:'H:i' }}</td>
+                 </tr>
+                 {% endfor %}
+                </tbody>
+            </table>
+    </div>
+  </div>
+</div>
+</form>
+</body>
+</html>
+{% endblock %}

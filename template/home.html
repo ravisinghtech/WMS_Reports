@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WMS Reports</title>
+      {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'dropdown.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+</head>
+
+<div class="container-fluid vh-100 bg-gray-dark">
+    <div class="card h-100 text-center">
+      <div class="card-header">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Menu</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item list-group-item-dark btndp" href="{% url 'reportsHome' %}">Home</a></li>
+                <li><a class="dropdown-item list-group-item-dark btndp" href="{% url 'inventory' %}">Inventory</a></li>
+                <li><a class="dropdown-item list-group-item-dark btndp" href="{% url 'logout' %}">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+      </div>
+        <div class="card-body">
+        {% block content %}
+<!--             <input type="datetime-local" id="fromDate" name="From Date">-->
+<!--             <input type="datetime-local" id="toDate" name="To Date">-->
+            <div class="container">
+                 <div class="row">
+                     <div class="col-sm float-left">
+                         <img src="/static/images/Girnarlogo2.png" width="150" height="80" class="img-fluid" alt="Responsive image">
+                     </div>
+                     <div class="col-sm">
+                         <button type="button" class="btnsuccess btn-success btn-sm"
+                   onclick="location.href='{% url 'GetSummary' %}'">Get Summary</button>
+                     </div>
+                    <div class="col-sm">
+                         <h1>{{Status}}</h1>
+                    </div>
+                     <div class="col-sm float-right">
+                         <img src="/static/images/BanasLogo.PNG" width="60" height="60" class="img-fluid" alt="Responsive image">
+                    </div>
+                 </div>
+              <div class="row">
+                 <div class="col-sm" style="height: 60vh; width:40vh; overflow-y: auto table-responsive-sm;">
+                    <table class="table table-sm table-hover table-dark table-responsive">
+                     <tbody>
+                         {% for results in PalletSummary %}
+                         <tr>
+                             <td class="text-start bg-warning">{{ results.0 }} Pallet</td>
+                             <td class="text-start bg-danger">{{ results.1 }}</td>
+                         </tr>
+                         {% endfor %}
+                        </tbody>
+                         <tbody>
+                         {% for results in RackSummary %}
+                         <tr>
+                             <td class="text-start bg-primary">{{ results.0 }} Rack</td>
+                             <td class="text-start bg-success">{{ results.1 }}</td>
+                         </tr>
+                         {% endfor %}
+                        </tbody>
+                </table>
+                 </div>
+                  <div class="col-sm">
+<!--                      <span class="label label-info pull-left">@ Cartons</span>-->
+                   <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+                    <script>
+                    var xValues = [{% for item in OrderSummary %}'{{item.0}}',{% endfor %}];
+                    var yValues = [{% for item in OrderSummary %}'{{item.1}}',{% endfor %}];
+                    var barColors = ["red", "green","blue","orange","brown", "yellow"];
+                    new Chart("myChart", {
+                      type: "bar",
+                      data: {
+                        labels: xValues,
+                        datasets: [{
+                          backgroundColor: barColors,
+                          data: yValues
+                        }]
+                      },
+                      options: {
+                        legend: {display: false},
+                        title: {
+                          display: true,
+                          text: "Cartons per quantity            Last 30 Days Product Demand 2022"
+                        }
+                      }
+                    });
+                 </script>
+                 </div>
+             </div>
+            </div>
+        {% endblock %}
+         </div>
+      <div class="card-footer text-white bg-dark">
+        <p class="card-text">©GIRNAAR FACTORY BUSINESS PVT LTD. Contact No. 918169361460/918983371495</p>
+      </div></div>
+  </div>
+</div>
+</html>
